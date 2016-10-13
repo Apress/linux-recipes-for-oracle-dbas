@@ -1,0 +1,8 @@
+#!/bin/bash
+checkUser=oracle
+curWho=$(whoami)
+if [ "$curWho" != "$checkUser" ]; then
+echo "You are currently logged on as: $curWho"
+echo "Must be logged in as $checkUser to run this script.."
+exit 1
+fi

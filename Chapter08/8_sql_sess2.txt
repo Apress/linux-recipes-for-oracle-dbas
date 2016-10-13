@@ -1,0 +1,18 @@
+SET LINESIZE 80 HEADING OFF FEEDBACK OFF
+SELECT
+RPAD('USERNAME : ' || s.username, 80) ||
+RPAD('OSUSER : ' || s.osuser, 80) ||
+RPAD('PROGRAM : ' || s.program, 80) ||
+RPAD('SPID : ' || p.spid, 80) ||
+RPAD('SID : ' || s.sid, 80) ||
+RPAD('SERIAL# : ' || s.serial#, 80) ||
+RPAD('MACHINE : ' || s.machine, 80) ||
+RPAD('TERMINAL : ' || s.terminal, 80) ||
+RPAD('SQL TEXT : ' || q.sql_text, 80)
+FROM v$session s
+,v$process p
+,v$sql q
+WHERE s.paddr = p.addr
+AND p.spid = '&PID_FROM_OS'
+AND s.sql_address = q.address
+AND s.sql_hash_value = q.hash_value;

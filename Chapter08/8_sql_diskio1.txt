@@ -1,0 +1,10 @@
+SELECT *
+FROM
+(SELECT
+parsing_schema_name
+,direct_writes
+,SUBSTR(sql_text,1,75)
+,disk_reads
+FROM v$sql
+ORDER BY disk_reads DESC)
+WHERE rownum < 20;

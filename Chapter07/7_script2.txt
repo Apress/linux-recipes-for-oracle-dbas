@@ -1,0 +1,10 @@
+#!/bin/bash
+SID=SAND
+critProc=ora_smon
+ps -ef | grep -v 'grep' | grep ${critProc}_$SID
+if [ $? -eq 0 ]; then
+echo "$SID is available."
+else
+echo "$SID has issues." | mail -s "problem with $SID" bbill@gmail.com
+fi
+exit 0

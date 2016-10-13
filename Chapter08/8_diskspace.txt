@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+inCheck='/dev/sda1 /dev/sda2'
+for mntList in $inCheck
+do
+usedSpc=$(df -h $mntList|awk '{print $5}'|egrep -iv 'Use|Capacity'| \
+cut -d "%" -f1 -)
+#
+case $usedSpc in
+[0-9])
+diskStat="relax, lots of disk space: $usedSpc"
+;;
+[1-7][0-9])
+diskStat="disk space okay: $usedSpc"
+;;
+[8][0-9])
+diskStat="WARNING, disk space low: $mntList $usedSpc percent full"
+;;
+[9][0-9])
+diskStat="ALERT, running out of space: $mntList $usedSpc percent full"
+;;
+[1][0][0])
+diskStat="ERROR, no space left: $mntList $usedSpc percent full"
+;;
+*)
+diskStat="huh?: $usedSpc"
+esac
+#
+BOX=$(uname -a | awk '{print $2}')
+sLine="Disk space issue on: $BOX, mount point $mntList"
+echo $diskStat|egrep 'ALERT|ERROR' && echo $diskStat|mailx -s "$sLine" prd@spt.com
+done
+#
+exit 0

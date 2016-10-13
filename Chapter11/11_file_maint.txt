@@ -1,0 +1,24 @@
+#!/bin/bash
+DAY=$(date '+%m.%d:%H:%M:%S')
+SID=RMDB1
+RMCMP='+14'
+#----------------------
+# source oracle OS variables; see recipe 7-7 for an example of the oraset script
+. /var/opt/oracle/oraset $SID
+#
+TARGDIR=$(sqlplus -s <<EOF
+system/foo
+SET HEADING OFF FEEDBACK OFF
+SELECT value FROM v\$parameter WHERE name='background_dump_dest';
+EXIT;
+EOF)
+#
+# Move and compress the alert.log file
+if [ -f $TARGDIR/alert_${SID}.log ]; then
+mv $TARGDIR/alert_${SID}.log $TARGDIR/${DAY}_alert_${SID}.log
+gzip -f $TARGDIR/${DAY}_alert_${SID}.log
+fi
+# Remove old compressed files
+find $TARGDIR -name "*.gz" -type f -mtime $RMCMP -exec rm -f {} \;
+#
+exit 0

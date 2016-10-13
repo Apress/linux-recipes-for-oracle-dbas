@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+if [ $# -ne 2 ]; then
+echo "Usage: $0 SID threshold"
+exit 1
+fi
+# source oracle OS variables; see recipe 7-7 for an example of oraset script
+. /var/opt/oracle/oraset $1
+crit_var=$(sqlplus -s <<EOF
+system/foo
+SET HEAD OFF FEEDBACK OFF
+SELECT COUNT(*) FROM
+(SELECT (sysdate - MAX(end_time)) delta
+FROM v\$rman_backup_job_details WHERE status='COMPLETED') a
+WHERE a.delta > $2;
+EXIT;
+EOF)
+if [ $crit_var -ne 0 ]; then
+echo "rman backup problem with $1" | mailx -s "rman problem" chuck@orc.com
+else
+echo "rman ok"
+fi
+exit 0

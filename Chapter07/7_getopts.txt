@@ -1,0 +1,39 @@
+#!/bin/bash
+PRG=$(basename $0)
+USAGE="Usage: $PRG -d SID [-c compress] [-h]"
+if [ $# -eq 0 ]; then
+echo $USAGE
+exit 1
+fi
+# If char followed by :, then argument is expected, the argument
+# should be separated from the option by a white space.
+OPTSTRING=":d:c:h"
+#
+while getopts "$OPTSTRING" ARGS; do
+case $ARGS in
+d) ORACLE_SID=${OPTARG}
+;;
+c) COMP_SWITCH=$(echo ${OPTARG} | tr '[A-Z]' '[a-z')
+if [ $COMP_SWITCH = "compress" ]; then
+COMP_MODE=" as compressed backupset "
+else
+echo $USAGE
+exit 1
+fi
+;;
+h) echo $USAGE
+exit 0
+;;
+*) echo "Error: Not a valid switch or missing argument."
+echo ${USAGE}
+exit 1
+;;
+esac
+done
+#
+echo rman backup
+rman target / <<EOF
+backup $COMP_MODE database;
+EOF
+#
+exit 0

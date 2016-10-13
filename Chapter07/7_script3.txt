@@ -1,0 +1,9 @@
+#!/bin/bash
+thresh=1048576
+totMem=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+if [ $totMem -lt $thresh ]; then
+echo "Total Memory $totMem is less than: $thresh"
+exit 1
+else
+echo "Total Memory is: $totMem"
+fi

@@ -1,0 +1,33 @@
+##############################################################################
+# ASM Init.ora parameter
+##############################################################################
+###########################################
+# Diagnostics and Statistics
+###########################################
+background_dump_dest=/apps/oracle/admin/+ASM/bdump
+core_dump_dest=/apps/oracle/admin/+ASM/cdump
+user_dump_dest=/apps/oracle/admin/+ASM/udump
+##############################################
+# Instanct Type
+# There are two possible instance types:
+# ASM or RDBMS (regular database)
+##############################################
+instance_type=asm
+###########################################
+# Pools
+###########################################
+large_pool_size=12M
+###########################################
+# Security
+###########################################
+remote_login_passwordfile=exclusive
+# The default asm_diskstring is null
+# A null asm_diskstring actually specifies the combination of
+# '/dev/raw/*' and 'ORCL:*' values
+#asm_diskstring='/dev/raw/raw*','/dev/sdc*'
+# When you first start your ASM instance, you should specify the asm_diskgroup
+# with a null value. If you have two diskgroups such as DATA and FRA, you need
+# to separate them with commas enclosed by single apostrophes
+# Here's an example:
+# asm_diskgroups='DATA','FRA'
+#asm_diskgroups=''

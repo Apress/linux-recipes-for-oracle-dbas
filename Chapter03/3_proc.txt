@@ -1,0 +1,12 @@
+SELECT s.username "ORACLE USER"
+,p.pid "PROC PID"
+,s.process "SESS PID"
+,s.osuser "OS User"
+,s.terminal "Terminal"
+,s.machine "Machine"
+,s.sid "SESS ID"
+,s.serial# "SESS Serial#"
+FROM v$process p
+,v$session s
+WHERE p.addr = s.paddr
+/

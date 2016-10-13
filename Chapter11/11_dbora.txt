@@ -1,0 +1,15 @@
+#!/bin/bash
+# chkconfig: 35 99 10
+# description: Starts and stops Oracle processes
+ORA_HOME=/oracle/product/10.2
+ORA_OWNER=oracle
+case "$1" in
+'start')
+su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl start"
+su - $ORA_OWNER -c $ORA_HOME/bin/dbstart
+;;
+'stop')
+su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
+su - $ORA_OWNER -c $ORA_HOME/bin/dbshut
+;;
+esac

@@ -1,0 +1,47 @@
+#!/bin/bash
+# File Name: oas_init.bash
+# Description: Script called by /etc/init.d/appsora to actually startup
+# or shutdown the application server.
+#
+export START_SHUTDOWN_FLAG=$1
+# ------------------------------------------------------------------------------
+# INITIAL SETUP
+# ------------------------------------------------------------------------------
+FN=`echo $0 | sed s/\.*[/]//`
+export ORACLE_BASE=/apps/oracle
+export BINDIR=/var/opt/oracle/sh
+#-----------------------------------------------
+export FILENAME=$(basename $0 |awk -F"." {'print $1'})
+export CONFIG_FILE="${SH}"/"${FILENAME}".conf
+export CONTROL_FILE="${SH}"/"${FILENAME}".ctl
+export FN=`print $0 | sed s/\.*[/]//`
+#---------------------------------------------------------------------
+# Setup the Oracle Environment and pass the ORACLE_SID
+#---------------------------------------------------------------------
+export PATH=$PATH:/usr/local/bin
+export ORAENV_ASK=NO
+export ORACLE_SID=ias10g
+. oraenv
+[ "$START_SHUTDOWN_FLAG" = "" ] &&
+{
+echo "No startup or shutdown flag specified!"
+echo "Aborting!"
+exit 1;
+}
+#
+[ "$START_SHUTDOWN_FLAG" = "start" ] &&
+{
+export MODE="startall"
+cd $ORACLE_HOME/opmn/bin
+./opmnctl $MODE
+emctl start agent
+}
+#
+[ "$START_SHUTDOWN_FLAG" = "stop" ] &&
+{
+export MODE="stopall"
+cd $ORACLE_HOME/opmn/bin
+./opmnctl $MODE
+}
+#
+emctl $START_SHUTDOWN_FLAG iasconsole

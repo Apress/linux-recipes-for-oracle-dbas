@@ -1,0 +1,14 @@
+SELECT *
+FROM
+(SELECT
+s.statistic_name
+,s.owner
+,s.object_type
+,s.object_name
+,s.value
+FROM v$segment_statistics s
+WHERE s.statistic_name IN
+('physical reads', 'physical writes', 'logical reads',
+'physical reads direct', 'physical writes direct')
+ORDER BY s.value DESC)
+WHERE rownum < 20;

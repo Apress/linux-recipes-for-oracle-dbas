@@ -1,0 +1,26 @@
+create database DBADEV
+user sys identified by oracle123
+user system identified by oracle123
+maxdatafiles 1021
+maxinstances 4
+maxlogfiles 16
+character set WE8MSWIN1252
+national character set AL16UTF16
+datafile
+'+DATA' size 1000M
+autoextend off extent management local
+sysaux datafile '+DATA' size 1000m
+default temporary tablespace temp
+tempfile '+DATA' size 4000m
+uniform size 1m
+undo tablespace undo_rbs
+datafile '+DATA' size 4000m
+logfile
+('+DATA'
+,'+FRA') size 300M,
+('+DATA'
+,'+FRA') size 300M,
+('+DATA'
+,'+FRA') size 300M,
+('+DATA'
+,'+FRA') size 300M;

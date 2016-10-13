@@ -1,0 +1,6 @@
+#!/bin/bash
+ORACLE_SID=SCDEV
+ORACLE_HOME=/orahome/oracle/product/10.2.0.1/db_1
+PATH=$ORACLE_HOME/bin:$PATH
+echo "select 'DB up' from dual;" | sqlplus -s system/foo
+exit 0

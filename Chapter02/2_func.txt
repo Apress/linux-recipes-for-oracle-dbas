@@ -1,0 +1,12 @@
+#------------------------------------------
+# cd to bdump
+function bd {
+cd /oracle/${ORACLE_SID}/admin/bdump
+} # bd
+#------------------------------------------
+# View Oracle Database 11g alert.log file
+function valert2 {
+view $ORACLE_BASE/diag/rdbms/$(echo $ORACLE_SID|\
+tr A-Z a-z)/$ORACLE_SID/trace/alert_$ORACLE_SID.log
+} # valert2
+#------------------------------------------

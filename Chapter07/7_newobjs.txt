@@ -1,0 +1,9 @@
+#!/bin/bash
+newobjs=$(sqlplus -s << EOF
+fbar/invqi@INVQI
+select object_name
+from dba_objects
+where created > sysdate - 7
+and owner not in ('SYS','SYSTEM');
+EOF)
+echo $newobjs | mailx -s "new objects" support@backend.com

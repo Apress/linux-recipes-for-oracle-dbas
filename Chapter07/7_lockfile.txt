@@ -1,0 +1,11 @@
+LOCKFILE=/ora01/oradata/BRDSTN/lock/rman.lock
+if [ -f $LOCKFILE ]; then
+echo "lock file exists, exiting..."
+exit 1
+else
+echo "DO NOT REMOVE, RMAN LOCKFILE" > $LOCKFILE
+fi
+At the end of your script, remove the lock file:
+if [ -f $LOCKFILE ]; then
+rm $LOCKFILE
+fi

@@ -1,0 +1,28 @@
+#!/bin/sh
+# File Name: /etc/init.d/appsora
+# Description: Oracle Application Server auto start-stop script.
+#
+# Set ORA_DB_HOME to be equivalent to the $ORACLE_HOME
+#
+# Set ORA_OWNER to the user id of the owner of the
+# Oracle software in ORA_DB_HOME
+#
+ORA_DB_HOME=/apps/oracle/product/ias10g
+SH=/var/opt/oracle/sh
+ORA_OWNER=oracle
+export ORA_DB_HOME SH ORA_OWNER
+#
+case "$1" in
+'start')
+# Start the Oracle databases:
+# The following command assumes that the oracle login
+# will not prompt the user for any values
+su - $ORA_OWNER -c "$SH/oas_init.bash start" > /tmp/start_ias.log 2>&1
+;;
+'stop')
+# Stop the Oracle databases:
+# The following command assumes that the oracle login
+# will not prompt the user for any values
+su - $ORA_OWNER -c "$SH/oas_init.bash stop" > /tmp/shutdown_ias.log 2>&1
+;;
+esac

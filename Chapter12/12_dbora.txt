@@ -1,0 +1,23 @@
+#!/bin/sh
+# chkconfig: 345 99 10
+# Description: Oracle auto start-stop script.
+# Name: dbora
+#
+DB_HOME=/apps/oracle/product/11.1.0/DB
+OWNER=oracle
+export DB_HOME OWNER
+case "$1" in
+'start')
+# -- Sleep for 120 per Oracle Bug #: 3458327
+sleep 120;
+su - $OWNER -c "$DB_HOME/bin/dbstart $DB_HOME" > /tmp/dbstart.log 2>&1
+su - $OWNER -c "export ORAENV_ASK=NO; export ORACLE_SID=DBAPROD;. oraenv;
+lsnrctl start" > /tmp/listener_start.log 2>&1
+;;
+'stop')
+# Stop the Oracle databases:
+su - $OWNER -c "export ORAENV_ASK=NO; export ORACLE_SID=DBAPROD;. oraenv;
+lsnrctl stop" > /tmp/listener_stop.log 2>&1
+su - $OWNER -c $DB_HOME/bin/dbshut >/tmp/dbshut.log 2>&1
+;;
+esac
